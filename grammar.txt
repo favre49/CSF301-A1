@@ -31,6 +31,7 @@
 <jagged_assignment> R1 <access_index> COLON SIZE INTEGER_LITERAL COLON VALUES CURLY_OPEN <list_integer_list> CURLY_CLOSE
 <jagged_assignment> R1 <access_index> COLON SIZE INTEGER_LITERAL COLON VALUES CURLY_OPEN CURLY_CLOSE
 <list_integer_list> <integer_list> SEMICOLON <list_integer_list>
+<list_integer_list> <integer_list> SEMICOLON
 <list_integer_list> SEMICOLON <list_integer_list>
 <list_integer_list> <integer_list>
 <list_integer_list> SEMICOLON

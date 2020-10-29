@@ -49,9 +49,7 @@ void readGrammar(char* file_name, Grammar* G)
         char symbol_buffer[20];
         int j=0;
         while( line_buffer[i]!=' ')
-        {
           symbol_buffer[j++]=line_buffer[i++];
-        }
         symbol_buffer[j]='\0';
         G->grammar_lhs[k]=(SymbolNode*)malloc(sizeof(SymbolNode));
         G->grammar_lhs[k]->symbol=(char*)malloc(sizeof(char)*(j+1));
@@ -68,9 +66,7 @@ void readGrammar(char* file_name, Grammar* G)
         char symbol_buffer[20];
         int j=0;
         while(line_buffer[i]!=' ' && line_buffer[i]!='\n')
-        {
           symbol_buffer[j++]=line_buffer[i++];
-        }
         symbol_buffer[j]='\0';
         curr_symbol=curr_symbol->next;
         curr_symbol->symbol=(char*)malloc(sizeof(char)*(j+1));

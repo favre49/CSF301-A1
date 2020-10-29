@@ -27,9 +27,7 @@ int main(int argc, char* argv[])
     scanf("%d",&option);
 
     if(option==0)
-    {
       break;
-    }
     else if (option==1)
     {
       ParseTree* t = (ParseTree*)malloc(sizeof(ParseTree));
