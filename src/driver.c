@@ -4,17 +4,17 @@
  * Authors:
  * Rahul Ganesh Prabhu (2018A7PS0193P)
  * Shreyas Kera (2018A7PS1119P)
- * Achyut Anand Tadepalli (2018A7PS1118P)
+ * Achyuth Anand Tadepalli (2018A7PS1117P)
  * Raghurama Varma Gonela (2018A7PS1120P)
  */
 #include "token_stream.h"
 #include "parse_tree.h"
 #include "grammar.h"
 
-int main()
+int main(int argc, char* argv[])
 {
   TokenStream* s = (TokenStream*)malloc(sizeof(TokenStream));
-  tokenizeSourceCode("source.txt",s);
+  tokenizeSourceCode(argv[1],s);
   TokenStreamNode* saved_head = s->head; // To rewind the token stream between calls
 
   Grammar* G = (Grammar*)malloc(sizeof(Grammar));

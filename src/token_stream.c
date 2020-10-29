@@ -4,7 +4,7 @@
  * Authors:
  * Rahul Ganesh Prabhu (2018A7PS0193P)
  * Shreyas Kera (2018A7PS1119P)
- * Achyut Anand Tadepalli (2018A7PS1118P)
+ * Achyuth Anand Tadepalli (2018A7PS1117P)
  * Raghurama Varma Gonela (2018A7PS1120P)
  */
 
@@ -19,7 +19,7 @@ void tokenizeSourceCode(char* file_name, TokenStream* s)
   s->head = (TokenStreamNode*) malloc(sizeof(TokenStreamNode));
   TokenStreamNode* head = s->head; // Current head of the linked list being built
   TokenStreamNode* prev = NULL;
-  size_t line_number = 1; 
+  size_t line_number = 1;
 
   if (fptr==NULL)
   {
@@ -68,5 +68,3 @@ void tokenizeSourceCode(char* file_name, TokenStream* s)
     free(head);
   }
 }
-
-

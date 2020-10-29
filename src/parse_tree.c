@@ -4,7 +4,7 @@
  * Authors:
  * Rahul Ganesh Prabhu (2018A7PS0193P)
  * Shreyas Kera (2018A7PS1119P)
- * Achyut Anand Tadepalli (2018A7PS1118P)
+ * Achyuth Anand Tadepalli (2018A7PS1117P)
  * Raghurama Varma Gonela (2018A7PS1120P)
  */
 
@@ -776,7 +776,7 @@ void validateExpression(ParseTreeNode* expression_root, TypeExpressionTable* E)
       if (term1->type_expression.t == TYPE_BOOLEAN || term2->type_expression.t == TYPE_BOOLEAN)
       {
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands cannot be boolean");
-      } 
+      }
       else if(!isTEEqual(term1->type_expression, term2->type_expression))
       {
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands must be of the same type");
@@ -818,7 +818,7 @@ void validateExpression(ParseTreeNode* expression_root, TypeExpressionTable* E)
       {
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands must be of the same type");
       }
-    
+
       expression_root->type_expression.t = TYPE_BOOLEAN;
       expression_root->type_expression_exists = 1;
     }
