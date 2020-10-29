@@ -16,7 +16,6 @@ To compile, use `make`. This will create the executable `driver`. To run this ex
 
 ## Implementation details
 
-* The source file is always in source.txt
 * All outputs are in the format described in the problem description
 * Since the type of a faulty expression (say, multiplication of boolean and real) is undefined, our implementation assumes the following):
   * If the operation is division, the output is always a real
