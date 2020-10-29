@@ -71,49 +71,67 @@ int isTEEqual(TypeExpression a, TypeExpression b)
 // Print the type expression
 void printTE(TypeExpression a)
 {
-  printf("<type = ");
-  printf("%s",type_map[a.t]);
+  char out[300] = "";
+  char buffer[300]  = "";
+  strcat(out,"<type= ");
+  sprintf(buffer,"%s",type_map[a.t]);
+  strcat(out,buffer);
   if (a.t==TYPE_RECTANGULAR_ARRAY)
   {
-    printf(", dimensions=%d",a.array.r.dimension_count);
+    sprintf(buffer,", dimensions=%d",a.array.r.dimension_count);
+    strcat(out,buffer);
     for (int dim = 1; dim <= a.array.r.dimension_count; dim++)
-      printf(" range_R%d=(%d,%d)", dim, a.array.r.lows[dim-1], a.array.r.highs[dim-1]);
-    printf(" basicElementType = integer");
+    {
+      sprintf(buffer," range_R%d=(%d,%d)", dim, a.array.r.lows[dim-1], a.array.r.highs[dim-1]);
+      strcat(out,buffer);
+    }
+    strcat(out," basicElementType = integer");
   }
   if (a.t==TYPE_JAGGED_ARRAY)
   {
     JaggedArray j=a.array.j;
-    printf(", dimensions=%d, ", j.dimension_count);
-    printf("range_R1=(%d,%d), ", j.range_R1[0], j.range_R1[1]);
+    sprintf(buffer,", dimensions=%d, ", j.dimension_count);
+    strcat(out,buffer);
+    sprintf(buffer,"range_R1=(%d,%d), ", j.range_R1[0], j.range_R1[1]);
+    strcat(out,buffer);
     int count=j.range_R1[1] - j.range_R1[0] + 1;
     printf("range_R2=(");
     if(j.dimension_count==2)
     {
       for(int dim = 0; dim < count-1; dim++)
       {
-        printf("%d,", j.range_R2[dim].length);
+        sprintf(buffer,"%d,", j.range_R2[dim].length);
+        strcat(out,buffer);
       }
-      printf("%d),", j.range_R2[count-1].length);
+      sprintf(buffer,"%d),", j.range_R2[count-1].length);
+      strcat(out,buffer);
     }
     else
     {
       for(int dim = 0; dim < count-1; dim++)
       {
-        printf("%d[", j.range_R2[dim].length);
+        sprintf(buffer,"%d[", j.range_R2[dim].length);
+        strcat(out,buffer);
         for(int dim2=0; dim2 < j.range_R2[dim].length-1; dim2++)
         {
-          printf("%d,", j.range_R2[dim].ranges[dim2]);
+          sprintf(buffer,"%d,", j.range_R2[dim].ranges[dim2]);
+          strcat(out,buffer);
         }
-        printf("%d], ", j.range_R2[dim].ranges[j.range_R2[dim].length-1]);
+        sprintf(buffer,"%d], ", j.range_R2[dim].ranges[j.range_R2[dim].length-1]);
+        strcat(out,buffer);
       }
-      printf("%d[", j.range_R2[count-1].length);
+      sprintf(buffer,"%d[", j.range_R2[count-1].length);
+      strcat(out,buffer);
       for(int dim2=0; dim2 < j.range_R2[count-1].length-1; dim2++)
       {
-        printf("%d,", j.range_R2[count-1].ranges[dim2]);
+        sprintf(buffer,"%d,", j.range_R2[count-1].ranges[dim2]);
+        strcat(out,buffer);
       }
-      printf("%d]),", j.range_R2[count-1].ranges[j.range_R2[count-1].length-1]);
+      sprintf(buffer,"%d]),", j.range_R2[count-1].ranges[j.range_R2[count-1].length-1]);
+      strcat(out,buffer);
     }
-    printf(" basicElementType = integer");
+    strcat(out," basicElementType = integer");
   }
-  printf(">");
+  strcat(out,">");
+  printf("%-50s",out);
 }

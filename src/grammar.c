@@ -101,5 +101,5 @@ void printRule(SymbolNode* head)
     strcat(pretty_rule," ");
     head= head->next;
   }
-  printf("%-140s",pretty_rule);
+  printf("%-124s",pretty_rule);
 }

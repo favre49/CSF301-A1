@@ -24,12 +24,12 @@ void printError(size_t lno, char* statement_type, char* operator, char* lexeme_1
   if (strcmp(lexeme_1,"---")!=0)
     printTE(type_1);
   else
-    printf("%-15s ","---");
+    printf("%-50s ","---");
   printf("  %-15s ",lexeme_2);
   if (strcmp(lexeme_2,"---")!=0)
     printTE(type_2);
   else
-    printf("%-15s ","---");
+    printf("%-50s ","---");
   printf("  Depth=%-5zu ",depth);
   printf("%s\n",message);
 }
@@ -156,7 +156,7 @@ void createParseTree(ParseTree* t, TokenStream* s, Grammar* G)
   }
   else
   {
-    printf("Something went wrong :(\n");
+    printf("Parse tree could not be built. Please examine syntax of program\n");
     exit(0);
   }
 }
@@ -165,15 +165,15 @@ void recursePrintParseTree(ParseTreeNode* root)
 {
   assert(root != NULL); // Sanity check
 
-  printf("%-23s ",root->symbol);
-  printf("%d ",root->is_leaf);
+  printf("%-23s",root->symbol);
+  printf("%-2d",root->is_leaf);
   char* placeholder = "***";
   if (root->is_leaf)
   {
-    printf("%-15s ",placeholder); // Type expression
-    printf("%-15s ",root->lexeme); // Lexeme
-    printf("%-5zu ",root->line_number); // Line number
-    printf("%-140s",placeholder); // Grammar rule
+    printf("%-50s",placeholder); // Type expression
+    printf("%-15s",root->lexeme); // Lexeme
+    printf("%-5zu",root->line_number); // Line number
+    printf("%-124s",placeholder); // Grammar rule
     printf("%-5zu\n",root->depth); // Depth of node
   }
   else
@@ -181,12 +181,11 @@ void recursePrintParseTree(ParseTreeNode* root)
     if(root->type_expression_exists)
     {
       printTE(root->type_expression);
-      printf(" ");
     }
     else
-      printf("%-15s ",placeholder); // Type expression
-    printf("%-15s ",placeholder); // Lexeme
-    printf("%-5zu ",root->line_number); // Line number
+      printf("%-50s",placeholder); // Type expression
+    printf("%-15s",placeholder); // Lexeme
+    printf("%-5zu",root->line_number); // Line number
     printRule(root->grammar_rule); // Grammar rule
     printf("%-5zu\n",root->depth); // Depth
   }
