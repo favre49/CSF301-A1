@@ -738,7 +738,14 @@ void validateExpression(ParseTreeNode* expression_root, TypeExpressionTable* E)
       if (term1->type_expression.t == TYPE_BOOLEAN || term2->type_expression.t == TYPE_BOOLEAN)
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands cannot be boolean",1,1);
       else if(!isTEEqual(term1->type_expression, term2->type_expression))
-        printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands must be of the same type",1,1);
+      {    
+        if (term1->type_expression.t == TYPE_RECTANGULAR_ARRAY && term2->type_expression.t == TYPE_RECTANGULAR_ARRAY)
+          printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Rectangular arrays are of different size",1,1);
+        else if (term1->type_expression.t == TYPE_JAGGED_ARRAY && term2->type_expression.t == TYPE_JAGGED_ARRAY)
+          printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Jagged arrays are of different size",1,1);
+        else
+          printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands must be of same type",1,1);
+      }
       expression_root->type_expression = term1->type_expression;
       expression_root->type_expression_exists = 1;
     }
@@ -760,7 +767,14 @@ void validateExpression(ParseTreeNode* expression_root, TypeExpressionTable* E)
         suppress_error = 1;
       }
       if(!suppress_error && !isTEEqual(term1->type_expression, term2->type_expression))
-        printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands must be of the same type",1,1);
+      {
+        if (term1->type_expression.t == TYPE_RECTANGULAR_ARRAY && term2->type_expression.t == TYPE_RECTANGULAR_ARRAY)
+          printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Rectangular arrays are of different size",1,1);
+        else if (term1->type_expression.t == TYPE_JAGGED_ARRAY && term2->type_expression.t == TYPE_JAGGED_ARRAY)
+          printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Jagged arrays are of different size",1,1);
+        else
+          printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands must be of same type",1,1);
+      }
       expression_root->type_expression.t = TYPE_REAL;
       expression_root->type_expression_exists = 1;
     }
@@ -833,7 +847,14 @@ void validateParseTree(ParseTreeNode* root, TypeExpressionTable* E)
   root->type_expression_exists = 1;
 
   if (!isTEEqual(rhs_record.type_expression,lhs_record.type_expression))
-    printError(root->line_number,"Assignment", "=", lexeme_1, lhs_record.type_expression, lexeme_2, rhs_record.type_expression, root->depth, "Assignment cannot be done to a different type",1,1);
+  {
+    if (rhs_record.type_expression.t == TYPE_RECTANGULAR_ARRAY && lhs_record.type_expression.t == TYPE_RECTANGULAR_ARRAY)
+      printError(root->line_number,"Assignment", "=", lexeme_1, lhs_record.type_expression, lexeme_2, rhs_record.type_expression, root->depth, "Rectangular arrays are of different size",1,1);
+    else if (rhs_record.type_expression.t == TYPE_JAGGED_ARRAY && lhs_record.type_expression.t == TYPE_JAGGED_ARRAY)
+      printError(root->line_number,"Assignment", "=", lexeme_1, lhs_record.type_expression, lexeme_2, rhs_record.type_expression, root->depth, "Jagged arrays are of different size",1,1);
+    else
+      printError(root->line_number,"Assignment", "=", lexeme_1, lhs_record.type_expression, lexeme_2, rhs_record.type_expression, root->depth, "Assignment cannot be done to a different type",1,1);
+  }
 
   if(root->right_sibling != NULL)
     validateParseTree(root->right_sibling,E);
