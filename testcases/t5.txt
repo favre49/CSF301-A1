@@ -1,0 +1,30 @@
+program ()
+{
+  declare list of variables v1 v2 v3 : integer ;
+  declare v4 : integer ;
+  declare list of variables b1 b2 : boolean ;
+  declare list of variables c1 c2 c3 : real ;
+  declare list of variables r3 r4 : array [ 1 .. 4 ] [ 4 .. 6 ] of integer ;
+  declare list of variables s24 s25 s26 : jagged array [ 3 .. 8 ] [ ] [ ] of integer ;
+  R1 [ 3 ] : size 3 : values { 20 21 11 ; 35 44 ; 54 22 }
+  R1 [ 4 ] : size 7 : values { 65 99 ; 89 81 65 ; 99 17 22 ; 11 22 21 ; 37 43 45 ; 11 77 64 ; 11 22 }
+  R1 [ 5 ] : size 2 : values { 22 19 ; 75 33 }
+  R1 [ 6 ] : size 2 : values { 22 313 ; 745 323 }
+  R1 [ 7 ] : size 2 : values { 21 22 ; 745 222 222 }
+  R1 [ 8 ] : size 2 : values { 22 111 111 ; 74 111 }
+  declare list of variables ab cd ef : jagged array [ 3 .. 8 ] [ ] of integer ;
+  R1 [ 3 ] : size 3 : values { 20 ; 35 ; 54 }
+  R1 [ 4 ] : size 6 : values { 65 ; 89 ; 99 ; 11 ; 37 ; 11 }
+  R1 [ 5 ] : size 2 : values { 22 ; 745 }
+  R1 [ 6 ] : size 4 : values { 67 ; 91 ; 13 ; 44 }
+  R1 [ 7 ] : size 1 : values { 17 }
+  R1 [ 8 ] : size 2 : values { 1 ; 2 }
+  ab = cd + ef ;
+  ab = s24 - r3 * r4 ;
+  r3 = r3 * r4 + r3 ;
+  r3 = r4 + 32 ;
+  r3 [ 4 4 ] = v1 ;
+  s24 [ 3 0 0 ] = r4 [ 1 6 ] + 23 * v4 ;
+  c1 = s24 [ 3 0 0 ] / 67 ;
+  c1 = c2 + s24 [ 3 0 0 ] / 67 ;
+}

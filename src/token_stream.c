@@ -32,7 +32,7 @@ void tokenizeSourceCode(char* file_name, TokenStream* s)
   {
     for (size_t i = 0; i < 500; i++)
     {
-      if (line_buffer[i]=='\n'|| line_buffer[i]==' ') // Line end
+      if (line_buffer[i]=='\n'|| line_buffer[i]==' ' || line_buffer[i]=='\t') // Line end
       {
         if (lexeme_buffer_size != 0)
         {

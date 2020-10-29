@@ -40,7 +40,7 @@ void printError(size_t lno, char* statement_type, char* operator, char* lexeme_1
   char* op = getOperator(operator);
   printf("%-5zu",lno);
   printf("%-15s",statement_type);
-  printf("%-10s",op);
+  printf("%-13s",op);
   printf("%-15s",lexeme_1);
   if (print_TE1)
     printTE(type_1);
@@ -738,7 +738,7 @@ void validateExpression(ParseTreeNode* expression_root, TypeExpressionTable* E)
       if (term1->type_expression.t == TYPE_BOOLEAN || term2->type_expression.t == TYPE_BOOLEAN)
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands cannot be boolean",1,1);
       else if(!isTEEqual(term1->type_expression, term2->type_expression))
-      {    
+      {
         if (term1->type_expression.t == TYPE_RECTANGULAR_ARRAY && term2->type_expression.t == TYPE_RECTANGULAR_ARRAY)
           printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Rectangular arrays are of different size",1,1);
         else if (term1->type_expression.t == TYPE_JAGGED_ARRAY && term2->type_expression.t == TYPE_JAGGED_ARRAY)
