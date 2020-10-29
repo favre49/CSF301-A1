@@ -12,26 +12,48 @@
 
 int error_output = 0;
 
+char* getOperator(char* operator)
+{
+  char* result = malloc(20*sizeof(char));
+  if (strcmp(operator,"PLUS")==0)
+    strcpy(result,"+");
+  else if (strcmp(operator,"MINUS")==0)
+    strcpy(result,"-");
+  else if (strcmp(operator,"OR")==0)
+    strcpy(result,"|||");
+  else if (strcmp(operator,"MULTIPLY")==0)
+    strcpy(result,"*");
+  else if (strcmp(operator,"DIVIDE")==0)
+    strcpy(result,"/");
+  else if (strcmp(operator,"AND")==0)
+    strcpy(result,"&&&");
+  else
+    strcpy(result,operator);
+  return result;
+}
+
 // Prints Error
 void printError(size_t lno, char* statement_type, char* operator, char* lexeme_1, TypeExpression type_1, char* lexeme_2, TypeExpression type_2, size_t depth, char* message)
 {
   if(error_output==0)
     return;
-  printf("%-5zu ",lno);
-  printf("%-15s ",statement_type);
-  printf("%-10s ",operator);
-  printf("%-15s ",lexeme_1);
+  char* op = getOperator(operator);
+  printf("%-5zu",lno);
+  printf("%-15s",statement_type);
+  printf("%-10s",op);
+  printf("%-15s",lexeme_1);
   if (strcmp(lexeme_1,"---")!=0)
     printTE(type_1);
   else
-    printf("%-50s ","---");
-  printf("  %-15s ",lexeme_2);
+    printf("%-50s","---");
+  printf("%-15s",lexeme_2);
   if (strcmp(lexeme_2,"---")!=0)
     printTE(type_2);
   else
-    printf("%-50s ","---");
-  printf("  Depth=%-5zu ",depth);
+    printf("%-50s","---");
+  printf("%-5zu",depth);
   printf("%s\n",message);
+  free(op);
 }
 
 // Fills the next level with the grammar rule we are trying
@@ -746,11 +768,7 @@ void validateExpression(ParseTreeNode* expression_root, TypeExpressionTable* E)
     if (lexeme_2 == NULL)
       lexeme_2 = "---";
 
-    // The terms should definitely have the same type
-    if(!isTEEqual(term1->type_expression, term2->type_expression))
-    {
-      printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands must be of the same type");
-    }
+    int suppress_error = 0; // To suppress a particular error
 
     // Combine based on operation
     if (strcmp(operation,"PLUS")==0 || strcmp(operation,"MINUS")==0 || strcmp(operation,"MULTIPLY")==0)
@@ -758,6 +776,10 @@ void validateExpression(ParseTreeNode* expression_root, TypeExpressionTable* E)
       if (term1->type_expression.t == TYPE_BOOLEAN || term2->type_expression.t == TYPE_BOOLEAN)
       {
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands cannot be boolean");
+      } 
+      else if(!isTEEqual(term1->type_expression, term2->type_expression))
+      {
+        printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands must be of the same type");
       }
       expression_root->type_expression = term1->type_expression;
       expression_root->type_expression_exists = 1;
@@ -767,14 +789,21 @@ void validateExpression(ParseTreeNode* expression_root, TypeExpressionTable* E)
       if (term1->type_expression.t == TYPE_BOOLEAN || term2->type_expression.t == TYPE_BOOLEAN)
       {
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands cannot be boolean");
+        suppress_error = 1;
       }
       if (term1->type_expression.t == TYPE_RECTANGULAR_ARRAY || term2->type_expression.t == TYPE_RECTANGULAR_ARRAY)
       {
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands cannot be arrays");
+        suppress_error = 1;
       }
       if (term1->type_expression.t == TYPE_JAGGED_ARRAY || term2->type_expression.t == TYPE_JAGGED_ARRAY)
       {
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands cannot be arrays");
+        suppress_error = 1;
+      }
+      if(!suppress_error && !isTEEqual(term1->type_expression, term2->type_expression))
+      {
+        printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands must be of the same type");
       }
       expression_root->type_expression.t = TYPE_REAL;
       expression_root->type_expression_exists = 1;
@@ -785,7 +814,12 @@ void validateExpression(ParseTreeNode* expression_root, TypeExpressionTable* E)
       {
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands must be boolean");
       }
-      expression_root->type_expression = term1->type_expression;
+      else if(!isTEEqual(term1->type_expression, term2->type_expression))
+      {
+        printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands must be of the same type");
+      }
+    
+      expression_root->type_expression.t = TYPE_BOOLEAN;
       expression_root->type_expression_exists = 1;
     }
   }
