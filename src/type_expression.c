@@ -1,3 +1,13 @@
+/*
+ * Definition of a Type Expression
+ *
+ * Authors:
+ * Rahul Ganesh Prabhu (2018A7PS0193P)
+ * Shreyas Kera (2018A7PS1119P)
+ * Achyut Anand Tadepalli (2018A7PS1118P)
+ * Raghurama Varma Gonela (2018A7PS1120P)
+ */
+
 #include "type_expression.h"
 
 int isTEEqual(TypeExpression a, TypeExpression b)

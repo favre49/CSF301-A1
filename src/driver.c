@@ -1,3 +1,12 @@
+/*
+ * Definition of the driver function
+ *
+ * Authors:
+ * Rahul Ganesh Prabhu (2018A7PS0193P)
+ * Shreyas Kera (2018A7PS1119P)
+ * Achyut Anand Tadepalli (2018A7PS1118P)
+ * Raghurama Varma Gonela (2018A7PS1120P)
+ */
 #include "token_stream.h"
 #include "parse_tree.h"
 #include "grammar.h"
@@ -10,6 +19,7 @@ int main()
 
   Grammar* G = (Grammar*)malloc(sizeof(Grammar));
   readGrammar("grammar.txt",G);
+  extern int error_output;
 
   while(1)
   {
@@ -23,6 +33,7 @@ int main()
     else if (option==1)
     {
       ParseTree* t = (ParseTree*)malloc(sizeof(ParseTree));
+      error_output = 0;
       createParseTree(t,s,G);
 
       // Prepare for next call
@@ -36,6 +47,7 @@ int main()
       E->capacity = 8;
       E->size = 0;
       E->T = malloc(E->capacity * sizeof(TypeExpressionRecord));
+      error_output = 1;
       createParseTree(t,s,G);
       traverseParseTree(t,E);
 
@@ -48,6 +60,7 @@ int main()
     {
       ParseTree* t = (ParseTree*)malloc(sizeof(ParseTree));
       TypeExpressionTable* E = malloc(sizeof(TypeExpressionTable));
+      error_output = 0;
       E->capacity = 8;
       E->size = 0;
       E->T = malloc(E->capacity * sizeof(TypeExpressionRecord));
@@ -66,6 +79,7 @@ int main()
       E->capacity = 8;
       E->size = 0;
       E->T = malloc(E->capacity * sizeof(TypeExpressionRecord));
+      error_output = 0;
       createParseTree(t,s,G);
       traverseParseTree(t,E);
       printTypeExpressionTable(*E);

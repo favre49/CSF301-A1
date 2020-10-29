@@ -1,3 +1,13 @@
+/*
+ * Declaration of the Grammar
+ *
+ * Authors:
+ * Rahul Ganesh Prabhu (2018A7PS0193P)
+ * Shreyas Kera (2018A7PS1119P)
+ * Achyut Anand Tadepalli (2018A7PS1118P)
+ * Raghurama Varma Gonela (2018A7PS1120P)
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,6 +51,11 @@ typedef struct {
  */
 void readGrammar(char* file_name, Grammar* G);
 
+/*
+ * Prints a rule
+ *
+ * head: The grammar rule
+ */
 void printRule(SymbolNode* head);
 
 #endif

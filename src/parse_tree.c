@@ -1,8 +1,22 @@
+/*
+ * Definition of a Parse Tree
+ *
+ * Authors:
+ * Rahul Ganesh Prabhu (2018A7PS0193P)
+ * Shreyas Kera (2018A7PS1119P)
+ * Achyut Anand Tadepalli (2018A7PS1118P)
+ * Raghurama Varma Gonela (2018A7PS1120P)
+ */
+
 #include "parse_tree.h"
+
+int error_output = 0;
 
 // Prints Error
 void printError(size_t lno, char* statement_type, char* operator, char* lexeme_1, TypeExpression type_1, char* lexeme_2, TypeExpression type_2, size_t depth, char* message)
 {
+  if(error_output==0)
+    return;
   printf("%-5zu ",lno);
   printf("%-15s ",statement_type);
   printf("%-10s ",operator);
@@ -277,7 +291,6 @@ void populateExpTable(ParseTreeNode* root, TypeExpressionTable* E)
                   if(var_ter.type_expression.t != TYPE_INTEGER)
                   {
                     // We have an error!
-                    printf("**ERROR**\n");
                     printError(sing_index_node->left_child->line_number,"Declaration", "Index Access", sing_index_node->left_child->lexeme, var_ter.type_expression, "---", var_ter.type_expression, sing_index_node->left_child->depth, "Array ranges must be an integer");
                   }
                   sing_index_node->type_expression = var_ter.type_expression;
@@ -305,7 +318,6 @@ void populateExpTable(ParseTreeNode* root, TypeExpressionTable* E)
                   TypeExpressionRecord var_ter = getTypeExpressionRecord(E,sing_index_node->left_child->lexeme);
                   if(var_ter.type_expression.t != TYPE_INTEGER)
                   {
-                    printf("**ERROR**\n");
                     printError(sing_index_node->left_child->line_number,"Declaration", "Index Access", sing_index_node->left_child->lexeme, var_ter.type_expression, "---", var_ter.type_expression, sing_index_node->left_child->depth, "Array ranges must be an integer");
                   }
                   sing_index_node->type_expression = var_ter.type_expression;
@@ -376,7 +388,6 @@ void populateExpTable(ParseTreeNode* root, TypeExpressionTable* E)
               if(jagged_size==NULL)
               {
                 //printf("Error: nothing between curly braces\n");
-                printf("**ERROR**\n");
                 printError(jagged_assignment->line_number,"Declaration", "***", "---", declare_type.type_expression, "---", declare_type.type_expression, jagged_assignment->left_child->depth, "3D JA size mismatch : nothing between curly braces");
                 //**TODO: error for nothing between curly braces
               }
@@ -390,25 +401,16 @@ void populateExpTable(ParseTreeNode* root, TypeExpressionTable* E)
                   {
                     if(integer_list->right_sibling!=NULL && strcmp(integer_list->right_sibling->symbol, "<list_integer_list>")==0)
                     {
-                      printf("**ERROR**\n");
                       printError(integer_list->line_number,"Declaration", "***", "---", declare_type.type_expression, "---", declare_type.type_expression, integer_list->depth, "3D JA size mismatch : empty integer list");
                       declare_type.type_expression.array.j.range_R2[range_r2_item_index].ranges[int_list_index] = 0;
                       break;
                     }
                     declare_type.type_expression.array.j.range_R2[range_r2_item_index].ranges[int_list_index] = 0;
-                    //**TODO: error for 3D JA size mismatch
-                    //printf("Error: 3D JA size mismatch\n");
-                    printf("**ERROR**\n");
                     printError(integer_list->line_number,"Declaration", "***", "---", declare_type.type_expression, "---", declare_type.type_expression, integer_list->depth, "3D JA size mismatch : empty integer list");
                     if(integer_list->right_sibling !=NULL)
-                    {
                       integer_list=integer_list->right_sibling->left_child;
-                    }
                     else
-                    {
                       break;
-                    }
-
                   }
                   else
                   {
@@ -419,13 +421,9 @@ void populateExpTable(ParseTreeNode* root, TypeExpressionTable* E)
                     {
                       temp_count++;
                       if(integer->right_sibling !=NULL)
-                      {
-                      integer = integer->right_sibling->left_child;
-                      }
+                        integer = integer->right_sibling->left_child;
                       else
-                      {
                         break;
-                      }
                     }
 
                     declare_type.type_expression.array.j.range_R2[range_r2_item_index].ranges[int_list_index] = temp_count;
@@ -436,17 +434,11 @@ void populateExpTable(ParseTreeNode* root, TypeExpressionTable* E)
                     }
                     else if(int_list_index<temp_size-1)
                     {
-                      //**TODO: Print error for too less number of integer lists
-                      //printf("Error: 3D JA size mismatch\n");
-                      printf("**ERROR**\n");
                       printError(integer_list->line_number,"Declaration", "***", "---", declare_type.type_expression, "---", declare_type.type_expression, integer_list->depth, "3D JA size mismatch : too less integer lists");
                       break;
                     }
                     else if(integer_list->right_sibling != NULL)
                     {
-                      //TODO: Error for having too many integer lists.
-                      //printf("Error: 3D JA size mismatch for too many integer lists\n");
-                      printf("**ERROR**\n");
                       printError(integer_list->line_number,"Declaration", "***", "---", declare_type.type_expression, "---", declare_type.type_expression, integer_list->depth, "3D JA size mismatch : too many integer lists");
                     }
                   }
@@ -454,19 +446,14 @@ void populateExpTable(ParseTreeNode* root, TypeExpressionTable* E)
               }
               range_r2_item_index++;
               if(jagged_assignment->right_sibling != NULL)
-              {
                 jagged_assignment=jagged_assignment->right_sibling->left_child;
-              }
               else
-              {
                 break;
-              }
             }
           }
           else
           {
             declare_type.type_expression.array.j.dimension_count=2;
-            //**TODO: PARSE 2d jagged array
 
             while(1)
             {
@@ -480,15 +467,10 @@ void populateExpTable(ParseTreeNode* root, TypeExpressionTable* E)
               declare_type.type_expression.array.j.range_R2[range_r2_item_index].length=temp_size;
               declare_type.type_expression.array.j.range_R2[range_r2_item_index].ranges=(int*)malloc(sizeof(int)*temp_size);
               while(jagged_size!=NULL && strcmp(jagged_size->symbol,"<list_integer_list>")!=0)
-              {
                 jagged_size=jagged_size->right_sibling; //**pointing to list_integer_list in rhs of jagged_assignment**
-              }
               if(jagged_size==NULL)
               {
-                //printf("Error: nothing between curly braces\n");
-                printf("**ERROR**\n");
                 printError(jagged_assignment->line_number,"Declaration", "***", "---", declare_type.type_expression, "---", declare_type.type_expression, jagged_assignment->left_child->depth, "2D JA size mismatch : nothing between curly braces");
-                //**TODO: error for nothing between curly braces
               }
               else
               {
@@ -500,25 +482,16 @@ void populateExpTable(ParseTreeNode* root, TypeExpressionTable* E)
                   {
                     if(integer_list->right_sibling!=NULL && strcmp(integer_list->right_sibling->symbol, "<list_integer_list>")==0)
                     {
-                      printf("**ERROR**\n");
                       printError(integer_list->line_number,"Declaration", "***", "---", declare_type.type_expression, "---", declare_type.type_expression, integer_list->depth, "2D JA size mismatch : empty integer list");
                       declare_type.type_expression.array.j.range_R2[range_r2_item_index].ranges[int_list_index] = 0;
                       break;
                     }
                     declare_type.type_expression.array.j.range_R2[range_r2_item_index].ranges[int_list_index] = 0;
-                    //**TODO: error for 2D JA size mismatch
-                    //printf("Error: 2D JA size mismatch\n");
-                    printf("**ERROR**\n");
                     printError(integer_list->line_number,"Declaration", "***", "---", declare_type.type_expression, "---", declare_type.type_expression, integer_list->depth, "2D JA size mismatch : empty integer list");
                     if(integer_list->right_sibling !=NULL)
-                    {
                       integer_list=integer_list->right_sibling->left_child;
-                    }
                     else
-                    {
                       break;
-                    }
-
                   }
                   else
                   {
@@ -529,19 +502,12 @@ void populateExpTable(ParseTreeNode* root, TypeExpressionTable* E)
                     {
                       temp_count++;
                       if(integer->right_sibling !=NULL)
-                      {
-                      integer = integer->right_sibling->left_child;
-                      }
+                        integer = integer->right_sibling->left_child;
                       else
-                      {
                         break;
-                      }
                     }
                     if(temp_count>1)
                     {
-                      //TODO: type definition error for 2D jagged array
-                      //printf("Error: Type definition error for 2D jagged array.\n");
-                      printf("**ERROR**\n");
                       printError(integer->line_number,"Declaration", "***", "---", declare_type.type_expression, "---", declare_type.type_expression, integer->depth, "Type definition error for 2D jagged array");
                     }
                     declare_type.type_expression.array.j.range_R2[range_r2_item_index].ranges[int_list_index] = 1;
@@ -552,17 +518,11 @@ void populateExpTable(ParseTreeNode* root, TypeExpressionTable* E)
                     }
                     else if(int_list_index<temp_size-1)
                     {
-                      //**TODO: Print error for too less number of integer lists
-                      //printf("Error: 2D JA size mismatch\n");
-                      printf("**ERROR**\n");
                       printError(integer_list->line_number,"Declaration", "***", "---", declare_type.type_expression, "---", declare_type.type_expression, integer_list->depth, "2D JA size mismatch : too less integer lists");
                       break;
                     }
                     else if(integer_list->right_sibling != NULL)
                     {
-                      //TODO: Error for having too many integer lists.
-                      //printf("Error: 2D JA size mismatch for too many integer lists\n");
-                      printf("**ERROR**\n");
                       printError(integer_list->line_number,"Declaration", "***", "---", declare_type.type_expression, "---", declare_type.type_expression, integer_list->depth, "2D JA size mismatch : too many integer lists");
                     }
                   }
@@ -672,7 +632,6 @@ void validateArrayId(ParseTreeNode* array_node, TypeExpressionTable* E)
         if (dim_index >= lhs_record.type_expression.array.r.dimension_count)
         {
           // IndexOutOfBoundsAccess
-          printf("**ERROR**\n");
           TypeExpression a;
           a.t = TYPE_INTEGER;
           printError(index_node->left_child->line_number,"Assignment", "Index Access", index_node->left_child->lexeme, a, array_node->left_child->lexeme, lhs_record.type_expression, index_node->left_child->depth, "Element access out of bounds");
@@ -680,7 +639,6 @@ void validateArrayId(ParseTreeNode* array_node, TypeExpressionTable* E)
         else if (index_value < lhs_record.type_expression.array.r.lows[dim_index] || index_value > lhs_record.type_expression.array.r.highs[dim_index])
         {
           // IndexOutOfBoundsAccess
-          printf("**ERROR**\n");
           TypeExpression a;
           a.t = TYPE_INTEGER;
           printError(index_node->left_child->line_number,"Assignment", "Index Access", index_node->left_child->lexeme, a, array_node->left_child->lexeme, lhs_record.type_expression, index_node->left_child->depth, "Element access out of bounds");
@@ -694,7 +652,6 @@ void validateArrayId(ParseTreeNode* array_node, TypeExpressionTable* E)
             if(lhs_record.type_expression.array.j.range_R1[0]>index_value ||lhs_record.type_expression.array.j.range_R1[1]<index_value)
             {
               // IndexOutOfBoundsAccess
-              printf("**ERROR**\n");
               TypeExpression a;
               a.t = TYPE_INTEGER;
               printError(index_node->left_child->line_number,"Assignment", "Index Access", index_node->left_child->lexeme, a, array_node->left_child->lexeme, lhs_record.type_expression, index_node->left_child->depth, "Element access out of bounds");
@@ -707,7 +664,6 @@ void validateArrayId(ParseTreeNode* array_node, TypeExpressionTable* E)
           if(index_value>=lhs_record.type_expression.array.j.range_R2[first_dim-low].length)
           {
             // IndexOutOfBoundsAccess
-            printf("**ERROR**\n");
             TypeExpression a;
             a.t = TYPE_INTEGER;
             printError(index_node->left_child->line_number,"Assignment", "Index Access", index_node->left_child->lexeme, a, array_node->left_child->lexeme, lhs_record.type_expression, index_node->left_child->depth, "Element access out of bounds");
@@ -718,7 +674,6 @@ void validateArrayId(ParseTreeNode* array_node, TypeExpressionTable* E)
           if(lhs_record.type_expression.array.j.dimension_count==2)
           {
             // IndexOutOfBoundsAccess
-            printf("**ERROR**\n");
             TypeExpression a;
             a.t = TYPE_INTEGER;
             printError(index_node->left_child->line_number,"Assignment", "Index Access", index_node->left_child->lexeme, a, array_node->left_child->lexeme, lhs_record.type_expression, index_node->left_child->depth, "Attempting to access 3rd dimension element in a 2D Jagged Array\n");
@@ -726,7 +681,6 @@ void validateArrayId(ParseTreeNode* array_node, TypeExpressionTable* E)
           else if(index_value>=lhs_record.type_expression.array.j.range_R2[first_dim-low].ranges[second_dim])
           {
             // IndexOutOfBoundsAccess
-            printf("**ERROR**\n");
             TypeExpression a;
             a.t = TYPE_INTEGER;
             printError(index_node->left_child->line_number,"Assignment", "Index Access", index_node->left_child->lexeme, a, array_node->left_child->lexeme, lhs_record.type_expression, index_node->left_child->depth, "Element access out of bounds");
@@ -739,7 +693,6 @@ void validateArrayId(ParseTreeNode* array_node, TypeExpressionTable* E)
       TypeExpressionRecord index_record = getTypeExpressionRecord(E,index_node->left_child->lexeme);
       if (index_record.type_expression.t!=TYPE_INTEGER)
       {
-        printf("**ERROR**\n");
         printError(index_node->left_child->line_number,"Assignment", "Index Access", index_node->left_child->lexeme, index_record.type_expression, array_node->left_child->lexeme, lhs_record.type_expression, index_node->left_child->depth, "Element access out of bounds");
       }
     }
@@ -797,7 +750,6 @@ void validateExpression(ParseTreeNode* expression_root, TypeExpressionTable* E)
     // The terms should definitely have the same type
     if(!isTEEqual(term1->type_expression, term2->type_expression))
     {
-      printf("**ERROR**\n");
       printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands must be of the same type");
     }
 
@@ -806,7 +758,6 @@ void validateExpression(ParseTreeNode* expression_root, TypeExpressionTable* E)
     {
       if (term1->type_expression.t == TYPE_BOOLEAN || term2->type_expression.t == TYPE_BOOLEAN)
       {
-        printf("**ERROR**\n");
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands cannot be boolean");
       }
       expression_root->type_expression = term1->type_expression;
@@ -816,18 +767,14 @@ void validateExpression(ParseTreeNode* expression_root, TypeExpressionTable* E)
     {
       if (term1->type_expression.t == TYPE_BOOLEAN || term2->type_expression.t == TYPE_BOOLEAN)
       {
-        printf("**ERROR**\n");
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands cannot be boolean");
       }
       if (term1->type_expression.t == TYPE_RECTANGULAR_ARRAY || term2->type_expression.t == TYPE_RECTANGULAR_ARRAY)
       {
-        printf("**ERROR**\n");
-        printf("Line Number: %zu\n",expression_root->line_number);
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands cannot be arrays");
       }
       if (term1->type_expression.t == TYPE_JAGGED_ARRAY || term2->type_expression.t == TYPE_JAGGED_ARRAY)
       {
-        printf("**ERROR**\n");
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands cannot be arrays");
       }
       expression_root->type_expression.t = TYPE_REAL;
@@ -837,8 +784,6 @@ void validateExpression(ParseTreeNode* expression_root, TypeExpressionTable* E)
     {
       if (term1->type_expression.t != TYPE_BOOLEAN || term2->type_expression.t != TYPE_BOOLEAN)
       {
-        printf("**ERROR**\n");
-        printf("Line Number: %zu\n",expression_root->line_number);
         printError(expression_root->line_number,"Assignment", operation, lexeme_1, term1->type_expression, lexeme_2, term2->type_expression, expression_root->depth, "Operands must be boolean");
       }
       expression_root->type_expression = term1->type_expression;
@@ -904,7 +849,6 @@ void validateParseTree(ParseTreeNode* root, TypeExpressionTable* E)
 
   if (!isTEEqual(rhs_record.type_expression,lhs_record.type_expression))
   {
-    printf("**ERROR**\n");
     printError(root->line_number,"Assignment", "=", lexeme_1, rhs_record.type_expression, lexeme_2, lhs_record.type_expression, root->depth, "Assignment cannot be done to a different type");
   }
 
