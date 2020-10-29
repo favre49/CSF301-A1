@@ -891,6 +891,8 @@ void validateParseTree(ParseTreeNode* root, TypeExpressionTable* E)
 
 void traverseParseTree(ParseTree* t, TypeExpressionTable* E)
 {
+  if (error_output)
+    printf("Errors:\n");
   ParseTreeNode* root = t-> root;
   // Descend the tree to reach the statement list
   root = root->left_child;
