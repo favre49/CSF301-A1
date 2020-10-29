@@ -1,21 +1,15 @@
 program ()
 {
-	declare list of variables new d w e2 : integer ;
-	declare v1 : integer ;
-	declare list of variables abcd ghd2_1 ssd_2_3 : array [ 2 .. 5 ] of integer ;
- 	declare list of variables a1 a2 : integer ;
-	declare list of variables b1 b2 b3 : boolean ;
-	declare list of variables c1 c2 : real ;
-	declare list of variables m1 m2 m3 : real ;
-	new = d * e2 + w + 76875 ;
-	v1 = a1 - a2 * d ;
-	b1 = b2 &&& b3 ||| b1 ;
-	c1 = c2 + c1 ;
-	abcd = ghd2_1 + ssd_2_3 ;
-	c2 = a1 / a2 ;
-	b1 = c1 &&& d ;
-	c1 = a1 * a2 ;
-	abcd [ 4 ] = ghd2_1 [ 5 ] + ssd_2_3 [ 2 ] ;
-	m1 = m2 + a1 ;
-	abcd = ghd2_1 * m1 + b1 ;
+  declare list of variables r1 r2 : array [ 2 .. 5 ] of integer ;
+  declare list of variables r3 r4 : array [ 1 .. 4 ] [ 4 .. 6 ] of integer ;
+  declare list of variables v1 v2 : integer ;
+  declare list of variables c1 c2 : real ;
+  declare r5 : array [ v1 .. 4 ] [ 4 .. 6 ] of integer ;
+  declare r6 : array [ 1 .. 4 ] [ v2 .. 6 ] of integer ;
+  r1 = r2 + r1 ;
+  r3 = r3 * r4 ;
+  r4 = r3 * c2 ;
+  v1 = r1 [ 3 ] + r3 [ 2 5 ] * r6 [ 2 2 ] ;
+  v2 = r1 [ 2 3 ] ;
+  r4 = r4 + r2 ;
 }

@@ -1,13 +1,22 @@
 program ()
 {
-  declare list of variables a b c : integer ;
+  declare a : integer ;
+  declare a1 : real ;
+  declare a2 : boolean ;
+  declare list of variables b2 b3 : boolean ;
+  declare list of variables z x y : real ;
+  declare list of variables b c d : integer ;
+  declare list of variables r1 r2 r3 : array [ 3 .. 6 ] [ a1 .. 7 ] [ 2 .. a ] [ 7 .. 2 ] of integer ;
+  declare r4 : array [ 3 .. 6 ] [ 3 .. 7 ] [ 1 .. 5 ] of integer ;
+  declare r5 : array [ 3 .. 6 ] [ 5 .. 7 ] [ 1 .. 5 ] of integer ;
+  declare r6 : array [ 3 .. 6 ] [ 3 .. 7 ] [ 1 .. 5 ] [ 1 .. 2 ] of integer ;
   declare list of variables j1 j2 : jagged array [ 2 .. 9 ] [ ] of integer ;
   R1 [ 2 ] : size 3 : values { ; ; 25 ; 54 ; 90 }
   R1 [ 3 ] : size 3 : values { ; 35 ; 54 }
-  R1 [ 4 ] : size 6 : values { ; 35 ; 54 }
+  R1 [ 4 ] : size 6 : values { 65 ; 89 ; 99 ; ; 11 ; 37 ; 11 }
   R1 [ 5 ] : size 2 : values { 22 ; 745 ; 45 }
   R1 [ 6 ] : size 4 : values { 67 ; 91 ; 13 }
-  R1 [ 7 ] : size 3 : values { 17 ; 23 ; 34 ; }
+  R1 [ 7 ] : size 2 : values { 17 ; 23 ; }
   R1 [ 8 ] : size 2 : values { 1 ; 2 ; ; }
   R1 [ 9 ] : size 2 : values { }
   declare list of variables j3 j4 : jagged array [ 2 .. 9 ] [ ] [ ] of integer ;
@@ -26,5 +35,5 @@ program ()
   R1 [ 6 ] : size 2 : values { 22 313 ; 745 323 }
   R1 [ 7 ] : size 2 : values { 21 22 ; 745 222 222 }
   R1 [ 8 ] : size 2 : values { 22 111 111 ; 74 111 }
-  a = b + c ;
+  a = 23 ;
 }
